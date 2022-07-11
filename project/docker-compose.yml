@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+  mainApp:
+    build: 
+      context: ../
+      dockerfile: ../auth.dockerfile
+    restart: always 
+    ports:
+      - "80:80"
+    environment:
+      - DSN=value
