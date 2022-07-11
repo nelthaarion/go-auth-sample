@@ -10,10 +10,13 @@ import (
 	_ "github.com/jackc/pgconn"
 	_ "github.com/jackc/pgx/v4"
 	_ "github.com/jackc/pgx/v4/stdlib"
+
+	"github.com/nelthaarion/go-auth-sample/cmd/api/data"
 )
 
 type App struct {
-	DB *sql.DB
+	DB   *sql.DB
+	Data data.Model
 }
 
 func main() {
@@ -21,7 +24,7 @@ func main() {
 	if conn == nil {
 		log.Panic("Could not connect to database")
 	}
-	app := App{DB: conn}
+	app := App{DB: conn, Data: data.New(conn)}
 
 	log.Fatal(http.ListenAndServe(":80", app.Routes()))
 }
