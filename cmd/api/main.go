@@ -31,8 +31,8 @@ func main() {
 
 func getDBConnection() *sql.DB {
 	DSN := os.Getenv("DSN")
+	// DSN := "host=localhost port=5432 user=postgres password=password dbname=users sslmode=disable timezone=UTC connect_timeout=5"
 	counter := 0
-
 	for {
 
 		db, err := sql.Open("pgx", DSN)

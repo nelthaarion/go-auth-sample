@@ -24,3 +24,24 @@ func BadRequest(w http.ResponseWriter) {
 	jsonData, _ := json.Marshal(msg)
 	w.Write(jsonData)
 }
+
+func MessageResponse(w http.ResponseWriter, msg string, statusCode int) {
+	type Response struct {
+		Message string `json:"message"`
+	}
+	resp := Response{Message: msg}
+	jsonData, _ := json.Marshal(resp)
+	w.WriteHeader(statusCode)
+	w.Write(jsonData)
+}
+
+func JsonResponse(w http.ResponseWriter, msg string, data any, statusCode int) {
+	type Response struct {
+		Message string `json:"message"`
+		Data    any    `json:"data"`
+	}
+	resp := Response{Message: msg, Data: data}
+	jsonData, _ := json.Marshal(resp)
+	w.WriteHeader(statusCode)
+	w.Write(jsonData)
+}

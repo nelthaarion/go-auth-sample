@@ -39,8 +39,30 @@ func (u *User) CreateNewUser() error {
 		hashed, _ := bcrypt.GenerateFromPassword([]byte(u.Password), 10)
 		pchan <- hashed
 	}()
-
-	_, err := db.QueryContext(ctx, "INSERT INTO users (username , password, created_at) values ($1 ,$2 ,$3)", u.Username, <-pchan, time.Now())
+	_, err := db.QueryContext(ctx, "INSERT INTO users (username , password, created_at, firstname, lastname) values ($1 ,$2 ,$3 ,'' , '')", u.Username, <-pchan, time.Now())
 	log.Println(err)
 	return err
+}
+
+func (u *User) GetUser() (User, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), dbTimeout)
+	defer cancel()
+	var foundUser User
+	row, err := db.QueryContext(ctx, "SELECT * FROM users where username = $1 LIMIT 1", u.Username)
+	if err != nil {
+		log.Println(err)
+		return foundUser, err
+	}
+	if row.Next() {
+		err = row.Scan(
+			&foundUser.ID,
+			&foundUser.Username,
+			&foundUser.Password,
+			&foundUser.Firstname,
+			&foundUser.Lastname,
+			&foundUser.CreatedAt,
+		)
+		log.Println(err)
+	}
+	return foundUser, nil
 }

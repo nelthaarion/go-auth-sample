@@ -9,5 +9,7 @@ func (app *App) Routes() http.Handler {
 
 	mux.HandleFunc("/ping", app.Ping)
 	mux.HandleFunc("/register", app.Register)
+	mux.HandleFunc("/login", app.Login)
+	mux.HandleFunc("/checkAuth", app.CheckAuthorization)
 	return mux
 }
