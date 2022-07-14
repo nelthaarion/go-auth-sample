@@ -1,0 +1,18 @@
+
+
+
+build_app :
+	@echo Building authentication application
+	chdir ../ && set GOOS=linux&& set GOARCH=amd64&& set CGO_ENABLED=0 && go build -o ./project/app ./cmd/api/
+	@echo Done
+
+up : build_app 
+	@echo Creating our containers 
+	docker-compose up -d --build
+	@echo Jobs Done 
+
+down: 
+	@echo stoping all containers
+	docker-compose down 
+	@echo Jobs done
+	
